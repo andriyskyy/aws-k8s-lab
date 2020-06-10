@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class JdbcTraceAspect(private val tracer: Tracer) {
 
-    @Around("execution (@org.springframework.data.rest.core.annotation.RepositoryRestResource *)")
+    //    @Around("execution (@org.springframework.data.rest.core.annotation.RepositoryRestResource *)")
+    @Around("within (@org.springframework.data.rest.core.annotation.RepositoryRestResource *)")
     fun traceJdbcCall(pjp: ProceedingJoinPoint): Any {
         val name = pjp.signature.name.toLowerHyphen()
         val span = tracer.nextSpan().name("jdbc:/${name}").start()
