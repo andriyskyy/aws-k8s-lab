@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       app: ui
+      version: "2.0"
   template:
     metadata:
       labels:
