@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-service
+  labels:
+    app: message-service
+    visualize: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: message-service
+  template:
+    metadata:
+      labels:
+        app: message-service
+        version: "2.0"
+        visualize: "true"
+    spec:
+      containers:
+      - name: message-service
+        image: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-message:v2
+        resources:
+          requests:
+            cpu: 200m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512m
+        ports:
+        - name: http
+          containerPort: 8080

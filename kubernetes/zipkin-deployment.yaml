@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin
+  labels:
+    app: zipkin
+    visualize: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin
+  template:
+    metadata:
+      labels:
+        app: zipkin
+        version: "latest"
+        visualize: "true"
+    spec:
+      containers:
+      - name: zipkin
+        image: openzipkin/zipkin
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9411
+        ports:
+        - name: http
+          containerPort: 9411

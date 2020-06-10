@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: guestbook
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  data:
+    rest:
+      base-path: /api
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}:3306/app?autoReconnect=true
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    test-on-borrow: true
+    validation-query: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      generate-ddl: true
+      ddl-auto: update
+      globally_quoted_identifiers: true
+  sleuth:
+    sampler:
+      percentage: "1.0"

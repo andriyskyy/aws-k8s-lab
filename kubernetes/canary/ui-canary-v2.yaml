@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-canary
+  labels:
+    app: ui
+    visualize: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+        version: "2.0"
+        visualize: "true"
+      annotations:
+        visualizer/uses: helloworld-service,guestbook-service,redis
+    spec:
+      containers:
+      - name: ui
+        image: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-ui:v2
+        env:
+          - name: MESSAGE_HOST
+            value: http://message-service:8080
+          - name: GUESTBOOK_HOST
+            value: http://guestbook-service:8080
+          - name: REDIS_HOST
+            value: redis
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 60
+          httpGet:
+            port: 8080
+            path: /
+        ports:
+        - name: http
+          containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-v2
+  labels:
+    app: ui
+    visualize: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+  selector:
+    app: ui
+    version: "2.0"
