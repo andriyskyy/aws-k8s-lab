@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "guestbook.fullname" . }}-gb
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+    {{- include "guestbook.selectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      {{- include "guestbook.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "guestbook.selectorLabels" . | nindent 8 }}
+      annotations:
+        visualizer/uses: mysql
+    spec:
+      containers:
+      - name: guestbook-service
+        image: "{{ .Values.guestbook.repository }}:{{ .Values.guestbook.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.guestbook.pullPolicy }}
+        env:
+          - name: DB_HOST
+            value: {{ include "guestbook.fullname" . }}-mysql
+          - name: DB_USER
+            value: {{ .Values.db.user}}
+          - name: DB_PASS
+            value: {{ .Values.db.pass}}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,52 @@
+# Default values for guestbook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+guestbook:
+  repository: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-guestbook
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+  service:
+    type: ClusterIP
+    port: 8080
+
+message:
+  repository: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-message
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+ui:
+  repository: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-ui
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+service:
+  type: ClusterIP
+  port: 8080
+# Don't do this in prod, just for demo
+db:
+  user: root
+  pass: yourpassword
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - path: "/"
+
+resources:
+  requests:
+    cpu: "100m"
+  limits:
+    cpu: "500m"

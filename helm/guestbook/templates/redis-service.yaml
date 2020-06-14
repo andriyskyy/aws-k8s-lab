@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "guestbook.fullname" . }}-redis
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+    {{- include "redis.selectorLabels" . | nindent 4 }}
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+  selector:
+  {{- include "redis.selectorLabels" . | nindent 4 }}

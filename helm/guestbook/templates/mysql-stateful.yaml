@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "guestbook.fullname" . }}-mysql
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+    {{- include "mysql.selectorLabels" . | nindent 4 }}
+spec:
+  serviceName: "mysql"
+  replicas: 1
+  selector:
+    matchLabels:
+  {{- include "mysql.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+      {{- include "mysql.selectorLabels" . | nindent 8 }}
+    spec:
+      containers: 
+      - name: mysql
+        image: mysql:8
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          # change this
+          value: {{ .Values.db.pass}}
+        - name: MYSQL_DATABASE
+          value: app
+        ports: 
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+          # name must match the volume name below
+        - name: {{ include "guestbook.fullname" . }}-mysql-persistent-storage
+          # mount path within the container
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "guestbook.fullname" . }}-mysql-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "default"
+        resources:
+          requests:
+            storage: 5Gi
