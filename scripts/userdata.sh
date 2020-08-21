@@ -8,6 +8,12 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 wget https://get.helm.sh/helm-v3.2.3-linux-amd64.tar.gz
 tar -zxvf helm-v3.2.3-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
-sudo yum install git -y
-git clone https://gitlab.com/DmyMi/kops-demo.git
-git clone https://gitlab.com/DmyMi/aws-k8s-lab.git
+sudo yum install git docker -y
+sudo systemctl enable --now docker
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+unzip awscliv2.zip && \
+sudo ./aws/install
+git clone https://gitlab.com/DmyMi/kops-demo.git /home/ec2-user/kops-demo
+sudo chown ec2-user:ec2-user /home/ec2-user/kops-demo -R
+git clone https://gitlab.com/DmyMi/aws-k8s-lab.git /home/ec2-user/aws-k8s-lab
+sudo chown ec2-user:ec2-user /home/ec2-user/aws-k8s-lab -R
