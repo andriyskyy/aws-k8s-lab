@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: guestbook-service
-        image: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-guestbook:latest
+        image: AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/AWS_REPO_PREFIX-guestbook:latest
         imagePullPolicy: Always
         env:
           - name: DB_HOST

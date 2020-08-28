@@ -14,14 +14,14 @@ spec:
     metadata:
       labels:
         app: ui
-        version: "1.0"
+        version: "2.0"
         visualize: "true"
       annotations:
-        visualizer/uses: message-service,guestbook-service,redis
+        visualizer/uses: helloworld-service,guestbook-service,redis
     spec:
       containers:
       - name: ui
-        image: 969692727193.dkr.ecr.us-east-1.amazonaws.com/dmin-ui:v1
+        image: AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/AWS_REPO_PREFIX-ui:v2
         env:
           - name: MESSAGE_HOST
             value: http://message-service:8080
@@ -33,6 +33,11 @@ spec:
           httpGet:
             path: /
             port: 8080
+        livenessProbe:
+          initialDelaySeconds: 60
+          httpGet:
+            port: 8080
+            path: /
         ports:
         - name: http
           containerPort: 8080
