@@ -11,4 +11,4 @@ sudo usermod -aG docker "${USER}"
 # Install java
 curl -s "https://get.sdkman.io" | bash
 source "/home/ec2-user/.sdkman/bin/sdkman-init.sh"
-sdk install java 8.0.252.j9-adpt
+sdk install java 8.0.265.j9-adpt
